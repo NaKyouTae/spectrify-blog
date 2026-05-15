@@ -244,6 +244,21 @@ export default async function PostPage({ params }: Props) {
     ],
   };
 
+  const faqJsonLd = post.faqs && post.faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: post.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: f.answer,
+          },
+        })),
+      }
+    : null;
+
   return (
     <div className="max-w-3xl mx-auto px-5 py-10">
       <script
@@ -254,6 +269,12 @@ export default async function PostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-[#9ca3af] mb-6">
         <Link href="/" className="hover:text-[#6b7280] transition-colors">
@@ -283,8 +304,45 @@ export default async function PostPage({ params }: Props) {
         <p className="text-[#6b7280] mt-3">{post.description}</p>
       </header>
 
+      {/* TL;DR — AEO/요약 */}
+      {post.summary && (
+        <aside
+          className="mb-8 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] px-5 py-4"
+          aria-label="핵심 요약"
+        >
+          <div className="text-xs font-semibold text-[#9ca3af] uppercase tracking-wider mb-1.5">
+            한 줄 요약
+          </div>
+          <p className="text-[#1a1a1a] leading-relaxed">{post.summary}</p>
+        </aside>
+      )}
+
       {/* Article Content */}
       <article className="prose mb-12">{renderMarkdown(post.content)}</article>
+
+      {/* FAQ */}
+      {post.faqs && post.faqs.length > 0 && (
+        <section className="mb-12 border-t border-[#e5e7eb] pt-8">
+          <h2 className="text-xl font-bold text-[#1a1a1a] mb-5">
+            자주 묻는 질문
+          </h2>
+          <div className="divide-y divide-[#e5e7eb]">
+            {post.faqs.map((faq, idx) => (
+              <details key={idx} className="group py-4">
+                <summary className="cursor-pointer list-none flex items-start justify-between gap-3 font-medium text-[#1a1a1a]">
+                  <span>Q. {faq.question}</span>
+                  <span className="text-[#9ca3af] transition-transform group-open:rotate-180 shrink-0">
+                    ▾
+                  </span>
+                </summary>
+                <p className="mt-3 text-[#374151] leading-relaxed whitespace-pre-line">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA - Related Posts */}
       {related.length > 0 && (

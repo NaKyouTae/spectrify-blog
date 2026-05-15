@@ -1,3 +1,8 @@
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
 export interface Post {
   slug: string;
   title: string;
@@ -6,6 +11,10 @@ export interface Post {
   date: string;
   readTime: string;
   content: string;
+  /** 한 줄 핵심 요약(=정의). 본문 상단 TL;DR 박스로 노출되며 AEO에 도움 */
+  summary?: string;
+  /** FAQPage 구조화 데이터 + 본문 하단 FAQ 섹션 */
+  faqs?: FAQ[];
 }
 
 export type Category = "subsidy" | "application" | "saving";
@@ -40,6 +49,30 @@ export const posts: Post[] = [
     category: "subsidy",
     date: "2026-05-01",
     readTime: "5분",
+    summary:
+      "청년 월세 지원금은 만 19~34세, 중위소득 60% 이하 청년에게 월 최대 20만 원을 12개월간 지원하는 정부 사업으로, 복지로 또는 주민센터에서 신청합니다.",
+    faqs: [
+      {
+        question: "전세에 살고 있어도 신청 가능한가요?",
+        answer:
+          "아니요, 월세 거주자만 신청 가능합니다. 전세 거주자는 청년 전세자금 대출을 확인해보세요.",
+      },
+      {
+        question: "부모님과 함께 살아도 되나요?",
+        answer:
+          "부모님과 별도 거주해야 합니다. 주민등록등본 상 독립 세대여야 합니다.",
+      },
+      {
+        question: "기숙사에 거주 중인데 신청 가능한가요?",
+        answer:
+          "기숙사는 임대차계약 관계가 아니므로 신청 대상에서 제외됩니다.",
+      },
+      {
+        question: "신청 후 언제 지급되나요?",
+        answer:
+          "신청 접수 후 약 4~6주 내 심사가 완료되며, 승인 시 매월 25일 전후로 지정 계좌에 입금됩니다.",
+      },
+    ],
     content: `
 ## 청년 월세 지원금이란?
 

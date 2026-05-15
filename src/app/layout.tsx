@@ -22,6 +22,18 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     type: "website",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: "/rss.xml", title: "스펙트리파이 RSS" },
+      ],
+    },
+  },
+  verification: {
+    other: {
+      "naver-site-verification": "7674c11bbe4e5c51444934019a94c155a7651cbb",
+    },
+  },
 };
 
 export default function RootLayout({
