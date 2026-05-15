@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "문의",
   description: "스펙트리파이에 궁금한 점이 있으시면 문의해 주세요.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

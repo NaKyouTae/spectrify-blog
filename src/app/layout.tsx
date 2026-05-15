@@ -10,6 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://spectrify.kr"),
   title: {
     default: "스펙트리파이 | 생활 정보 · 지원금 · 절약 가이드",
     template: "%s | 스펙트리파이",

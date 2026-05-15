@@ -1,8 +1,30 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import PostCard from "@/components/PostCard";
 import { posts, categoryInfo, type Category } from "@/data/posts";
 
 const categoryOrder: Category[] = ["subsidy", "application", "saving"];
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "스펙트리파이",
+  url: "https://spectrify.kr",
+  inLanguage: "ko-KR",
+  description:
+    "정부 지원금, 서류 발급, 절약 꿀팁까지. 꼭 필요한 생활 정보를 쉽고 빠르게 안내합니다.",
+  publisher: {
+    "@type": "Organization",
+    name: "스펙트리파이",
+    url: "https://spectrify.kr",
+  },
+};
 
 export default function Home() {
   const latestPosts = [...posts].sort(
@@ -11,6 +33,10 @@ export default function Home() {
 
   return (
     <div className="max-w-3xl mx-auto px-5 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       {/* Hero */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-[#1a1a1a] mb-2">

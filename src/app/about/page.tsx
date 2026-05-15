@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "소개",
   description: "스펙트리파이는 정부 지원금, 서류 발급, 절약 꿀팁 등 생활에 꼭 필요한 정보를 쉽게 안내하는 블로그입니다.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

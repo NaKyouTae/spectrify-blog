@@ -13,9 +13,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const url = `/posts/${post.slug}`;
   return {
     title: post.title,
     description: post.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url,
+      type: "article",
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      siteName: "스펙트리파이",
+      locale: "ko_KR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+    },
   };
 }
 
@@ -168,14 +187,73 @@ export default async function PostPage({ params }: Props) {
   if (!post) notFound();
 
   const info = categoryInfo[post.category];
+  const postUrl = `https://spectrify.kr/posts/${post.slug}`;
 
   // Find related posts (same category, excluding current)
   const related = posts
     .filter((p) => p.category === post.category && p.slug !== post.slug)
     .slice(0, 3);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    inLanguage: "ko-KR",
+    articleSection: info.name,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
+    author: {
+      "@type": "Organization",
+      name: "스펙트리파이",
+      url: "https://spectrify.kr",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "스펙트리파이",
+      url: "https://spectrify.kr",
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "홈",
+        item: "https://spectrify.kr",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: info.name,
+        item: `https://spectrify.kr/category/${post.category}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: postUrl,
+      },
+    ],
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-5 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-[#9ca3af] mb-6">
         <Link href="/" className="hover:text-[#6b7280] transition-colors">
